@@ -1,7 +1,7 @@
-import { getScores } from './../../lib/getScore';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSongs } from '../../lib/parseSong';
-import { getITunesSongs } from '../../lib/parseSong';
+
+import { getScores } from '~/lib/getScore';
+import { getSongs, getITunesSongs } from '~/lib/parseSong';
 
 export default async function handler(
   req: NextApiRequest,

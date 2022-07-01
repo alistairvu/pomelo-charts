@@ -1,81 +1,37 @@
-type SiteData = {
-  spotify: SongEntry[];
-  apple: SongEntry[];
-  iTunes: SongEntry[];
+import { SPOTIFY_MULT, AM_MULT, ITUNES_MULT } from '~/constants';
+
+export const getScore = (ranking: number) => {
+  if (ranking === 1) {
+    return 12;
+  }
+
+  if (ranking <= 10) {
+    return 12 - ranking;
+  }
+
+  if (ranking <= 20) {
+    return 1;
+  }
+
+  return 0;
 };
 
-type Lookup = {
-  [index: string]: {
-    song: string;
-    artist: string;
-  };
-};
-
-type RankData = {
-  spotify?: number;
-  apple?: number;
-  iTunes?: number;
-};
-
-type Ranks = {
-  [index: string]: RankData;
-};
-
-type Scores = {
-  song: string;
-  artist: string;
-  score: number;
-  ranks: RankData;
-};
-
-const SPOTIFY_MULT = 8;
-const AM_MULT = 4;
-const ITUNES_MULT = 1;
+const calculateScore = ({ spotify, apple, iTunes }: RankData) =>
+  getScore(spotify ?? 101) * SPOTIFY_MULT +
+  getScore(apple ?? 101) * AM_MULT +
+  getScore(iTunes ?? 101) * ITUNES_MULT;
 
 export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
-  const getPlainTitle = (name: string) => name.split(/ \- | \(/)[0];
+  const getPlainTitle = (name: string) => name.split(/ - | \(/)[0];
   const getPlainArtist = (name: string) => name.split(' & ')[0];
 
-  const getKey = ({ artist, song }: SongEntry) =>
+  const getKey = ({ artist, song }: SongData) =>
     getPlainTitle(song).toLowerCase() + getPlainArtist(artist).toLowerCase();
-
-  const getScore = (ranking: number) => {
-    if (ranking === 1) {
-      return 10;
-    }
-
-    if (ranking === 2) {
-      return 7;
-    }
-
-    if (ranking === 3) {
-      return 4;
-    }
-
-    if (ranking <= 10) {
-      return 3;
-    }
-
-    if (ranking <= 15) {
-      return 2;
-    }
-
-    if (ranking <= 20) {
-      return 1;
-    }
-
-    return 0;
-  };
-
-  const calculateScore = ({ spotify, apple, iTunes }: RankData) =>
-    getScore(spotify ?? 101) * SPOTIFY_MULT +
-    getScore(apple ?? 101) * AM_MULT +
-    getScore(iTunes ?? 101) * ITUNES_MULT;
 
   const lookup: Lookup = {};
   const ranks: Ranks = {};
 
-  for (const songData of spotify) {
+  spotify.forEach((songData) => {
     const key = getKey(songData);
     const { song, artist, ranking } = songData;
 
@@ -91,9 +47,9 @@ export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
     }
 
     ranks[key].spotify = Math.min(ranks[key].spotify ?? 101, ranking);
-  }
+  });
 
-  for (const songData of apple) {
+  apple.forEach((songData) => {
     const key = getKey(songData);
     const { song, artist, ranking } = songData;
 
@@ -109,9 +65,9 @@ export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
     }
 
     ranks[key].apple = Math.min(ranks[key].apple ?? 101, ranking);
-  }
+  });
 
-  for (const songData of iTunes) {
+  iTunes.forEach((songData) => {
     const key = getKey(songData);
     const { song, artist, ranking } = songData;
 
@@ -127,17 +83,13 @@ export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
     }
 
     ranks[key].iTunes = Math.min(ranks[key].iTunes ?? 101, ranking);
-  }
+  });
 
-  const result: Scores[] = [];
-
-  for (const song in ranks) {
-    result.push({
-      ...lookup[song],
-      score: calculateScore(ranks[song]),
-      ranks: ranks[song],
-    });
-  }
+  const result: SongRanking[] = Object.keys(ranks).map((song) => ({
+    ...lookup[song],
+    score: calculateScore(ranks[song]),
+    ranks: ranks[song],
+  }));
 
   const sorted = result
     .filter((a) => a.score > 0)
