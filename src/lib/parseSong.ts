@@ -62,7 +62,7 @@ export const getITunesSongs = async (
           }))
     );
 
-    return songs.filter((song) => song.ranking <= 100);
+    return songs.filter((song) => song.ranking <= 100 && song.ranking > 0);
   } catch (e) {
     console.error(e);
   }
