@@ -1,6 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next';
 
-import { Container } from '@chakra-ui/react';
+import { Container, Text, Box } from '@chakra-ui/react';
 
 import { SongDisplay } from '~/components/song/SongDisplay';
 import { getScores } from '~/lib/getScore';
@@ -12,10 +12,27 @@ import {
 
 type HomeProps = {
   songData: SongRanking[];
+  generated: Date;
 };
 
-const Home: NextPage<HomeProps> = ({ songData }: HomeProps) => (
+const Home: NextPage<HomeProps> = ({ songData, generated }: HomeProps) => (
   <Container p={4}>
+    <Box py={2}>
+      <Text>
+        Updated{' '}
+        {new Intl.DateTimeFormat('en-AU', {
+          timeZoneName: 'short',
+          hour: '2-digit',
+          minute: '2-digit',
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+          hour12: false,
+          timeZone: 'Australia/Sydney',
+        }).format(new Date(generated))}{' '}
+      </Text>
+    </Box>
+
     {songData &&
       songData.map((song) => <SongDisplay song={song} key={song.song} />)}
   </Container>
@@ -34,6 +51,7 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       props: {
         songData,
+        generated: new Date().toJSON(),
       },
     };
   }
@@ -41,6 +59,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       songData: [],
+      generated: new Date().toJSON(),
     },
   };
 };
