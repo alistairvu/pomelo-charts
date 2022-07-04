@@ -15,6 +15,7 @@ export const SongDisplay = ({ song }: SongDataProps) => {
       py={2}
       px={4}
       w="100%"
+      gap={5}
       justifyContent="space-between"
       alignItems="center"
       bgColor={song.rank === 1 ? 'black' : 'white'}
@@ -40,7 +41,7 @@ export const SongDisplay = ({ song }: SongDataProps) => {
       <GridItem colSpan={3}>
         <Text
           color={song.rank === 1 ? 'green.400' : 'black'}
-          fontSize="lg"
+          fontSize="md"
           fontWeight={song.rank === 1 ? 'semibold' : 'normal'}
         >
           {song.song}
@@ -50,7 +51,7 @@ export const SongDisplay = ({ song }: SongDataProps) => {
       <GridItem colSpan={2}>
         <Text
           color={song.rank === 1 ? 'green.400' : 'black'}
-          fontSize="lg"
+          fontSize="md"
           fontWeight={song.rank === 1 ? 'semibold' : 'normal'}
         >
           {song.artist}
@@ -60,7 +61,7 @@ export const SongDisplay = ({ song }: SongDataProps) => {
       <GridItem colSpan={1}>
         <Heading
           color={song.rank === 1 ? 'green.400' : 'black'}
-          fontSize="4xl"
+          fontSize="3xl"
           textAlign="end"
         >
           {song.score}

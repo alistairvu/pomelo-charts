@@ -1,16 +1,8 @@
 import { SPOTIFY_MULT, AM_MULT, ITUNES_MULT, YOUTUBE_MULT } from '~/constants';
 
 export const getScore = (ranking: number) => {
-  if (ranking === 1) {
-    return 12;
-  }
-
-  if (ranking <= 10) {
-    return 12 - ranking;
-  }
-
   if (ranking <= 20) {
-    return 1;
+    return 21 - ranking;
   }
 
   return 0;
