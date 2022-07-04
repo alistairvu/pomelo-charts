@@ -8,6 +8,7 @@ import {
   getSpotifySongs,
   getAppleSongs,
   getITunesSongs,
+  getYouTubeSongs,
 } from '~/lib/parseSong';
 
 type HomeProps = {
@@ -39,14 +40,15 @@ const Home: NextPage<HomeProps> = ({ songData, generated }: HomeProps) => (
 );
 
 export const getStaticProps: GetStaticProps = async () => {
-  const [spotify, apple, iTunes] = await Promise.all([
+  const [spotify, apple, iTunes, youTube] = await Promise.all([
     getSpotifySongs('https://kworb.net/spotify/country/au_daily.html'),
     getAppleSongs('https://kworb.net/charts/apple_s/au.html'),
     getITunesSongs('https://kworb.net/popau/'),
+    getYouTubeSongs('https://kworb.net/youtube/insights/au.html'),
   ]);
 
-  if (spotify && apple && iTunes) {
-    const songData = getScores({ spotify, apple, iTunes });
+  if (spotify && apple && iTunes && youTube) {
+    const songData = getScores({ spotify, apple, iTunes, youTube });
 
     return {
       props: {

@@ -10,7 +10,7 @@ import {
   Divider,
 } from '@chakra-ui/react';
 
-import { AM_MULT, ITUNES_MULT, SPOTIFY_MULT } from '~/constants';
+import { AM_MULT, ITUNES_MULT, SPOTIFY_MULT, YOUTUBE_MULT } from '~/constants';
 import { getScore } from '~/lib/getScore';
 
 type SomeModalProps = {
@@ -53,6 +53,28 @@ export const SongModal = ({ song, isOpen, onClose }: SomeModalProps) => (
                 {song.ranks.spotify
                   ? `#${song.ranks.spotify} [${
                       getScore(song.ranks.spotify ?? 101) * SPOTIFY_MULT
+                    } pts]`
+                  : 'No In [0 pts]'}
+              </Text>
+            </Flex>
+
+            <Flex
+              textAlign="center"
+              justifyContent="space-between"
+              alignItems="center"
+              py={2}
+              px={4}
+            >
+              <Text>YouTube</Text>
+              <Text
+                color={song.ranks.youTube === 1 ? 'green.500' : 'black'}
+                fontWeight={
+                  (song.ranks.youTube ?? 3) <= 2 ? 'semibold' : 'normal'
+                }
+              >
+                {song.ranks.youTube
+                  ? `#${song.ranks.youTube} [${
+                      getScore(song.ranks.youTube ?? 101) * YOUTUBE_MULT
                     } pts]`
                   : 'No In [0 pts]'}
               </Text>

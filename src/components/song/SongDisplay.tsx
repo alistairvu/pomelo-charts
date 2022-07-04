@@ -29,6 +29,11 @@ export const SongDisplay = ({ song }: SongDataProps) => {
           textAlign="start"
         >
           {song.rank}
+          {song.ranks.spotify === 1 &&
+            song.ranks.apple === 1 &&
+            song.ranks.iTunes === 1 &&
+            song.ranks.youTube === 1 &&
+            '*'}
         </Heading>
       </GridItem>
 

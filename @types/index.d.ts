@@ -5,9 +5,7 @@ type SongData = {
 };
 
 type SiteData = {
-  spotify: SongData[];
-  apple: SongData[];
-  iTunes: SongData[];
+  [key: string]: SongData[];
 };
 
 type Lookup = {
@@ -18,9 +16,7 @@ type Lookup = {
 };
 
 type RankData = {
-  spotify?: number;
-  apple?: number;
-  iTunes?: number;
+  [index: string]: number;
 };
 
 type Ranks = {

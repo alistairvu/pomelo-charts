@@ -93,3 +93,31 @@ export const getITunesSongs = async (
     return null;
   }
 };
+
+export const getYouTubeSongs = async (
+  url: string
+): Promise<SongData[] | null> => {
+  try {
+    const res = await fetch(url);
+    const htmlString = await res.text();
+    const $ = load(htmlString);
+    const searchSelector = 'tbody tr .mp';
+
+    const songs = $(searchSelector)
+      .map((_, e) => $(e).text())
+      .toArray()
+      .map((name, rank) => ({
+        ranking: rank + 1,
+        artist: name.split(' - ').map((e) => e.trim())[0],
+        song: name
+          .split(' - ')
+          .map((e) => e.trim())
+          .slice(1)
+          .join(' - '),
+      }));
+
+    return songs.filter((song) => song.ranking <= 100 && song.ranking > 0);
+  } catch (e) {
+    return null;
+  }
+};

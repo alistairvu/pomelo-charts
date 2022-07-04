@@ -1,4 +1,4 @@
-import { SPOTIFY_MULT, AM_MULT, ITUNES_MULT } from '~/constants';
+import { SPOTIFY_MULT, AM_MULT, ITUNES_MULT, YOUTUBE_MULT } from '~/constants';
 
 export const getScore = (ranking: number) => {
   if (ranking === 1) {
@@ -16,12 +16,13 @@ export const getScore = (ranking: number) => {
   return 0;
 };
 
-const calculateScore = ({ spotify, apple, iTunes }: RankData) =>
+const calculateScore = ({ spotify, apple, iTunes, youTube }: RankData) =>
   getScore(spotify ?? 101) * SPOTIFY_MULT +
   getScore(apple ?? 101) * AM_MULT +
-  getScore(iTunes ?? 101) * ITUNES_MULT;
+  getScore(iTunes ?? 101) * ITUNES_MULT +
+  getScore(youTube ?? 101) * YOUTUBE_MULT;
 
-export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
+export const getScores = (siteData: SiteData) => {
   const getPlainTitle = (name: string) => name.split(/ - | \(/)[0];
   const getPlainArtist = (name: string) => name.split(' & ')[0];
 
@@ -31,58 +32,26 @@ export const getScores = ({ spotify, apple, iTunes }: SiteData) => {
   const lookup: Lookup = {};
   const ranks: Ranks = {};
 
-  spotify.forEach((songData) => {
-    const key = getKey(songData);
-    const { song, artist, ranking } = songData;
+  Object.keys(siteData).forEach((site) => {
+    const songData = siteData[site];
 
-    if (lookup[key] === undefined) {
-      lookup[key] = {
-        song,
-        artist,
-      };
-    }
+    songData.forEach((song) => {
+      const key = getKey(song);
+      const { song: name, artist, ranking } = song;
 
-    if (ranks[key] === undefined) {
-      ranks[key] = {};
-    }
+      if (lookup[key] === undefined) {
+        lookup[key] = {
+          song: name,
+          artist,
+        };
+      }
 
-    ranks[key].spotify = Math.min(ranks[key].spotify ?? 101, ranking);
-  });
+      if (ranks[key] === undefined) {
+        ranks[key] = {};
+      }
 
-  apple.forEach((songData) => {
-    const key = getKey(songData);
-    const { song, artist, ranking } = songData;
-
-    if (lookup[key] === undefined) {
-      lookup[key] = {
-        song,
-        artist,
-      };
-    }
-
-    if (ranks[key] === undefined) {
-      ranks[key] = {};
-    }
-
-    ranks[key].apple = Math.min(ranks[key].apple ?? 101, ranking);
-  });
-
-  iTunes.forEach((songData) => {
-    const key = getKey(songData);
-    const { song, artist, ranking } = songData;
-
-    if (lookup[key] === undefined) {
-      lookup[key] = {
-        song,
-        artist,
-      };
-    }
-
-    if (ranks[key] === undefined) {
-      ranks[key] = {};
-    }
-
-    ranks[key].iTunes = Math.min(ranks[key].iTunes ?? 101, ranking);
+      ranks[key][site] = Math.min(ranks[key][site] ?? 101, ranking);
+    });
   });
 
   const result: SongRanking[] = Object.keys(ranks).map((song) => ({
