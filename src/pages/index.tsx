@@ -4,7 +4,11 @@ import { Container } from '@chakra-ui/react';
 
 import { SongDisplay } from '~/components/song/SongDisplay';
 import { getScores } from '~/lib/getScore';
-import { getSongs, getITunesSongs } from '~/lib/parseSong';
+import {
+  getSpotifySongs,
+  getAppleSongs,
+  getITunesSongs,
+} from '~/lib/parseSong';
 
 type HomeProps = {
   songData: SongRanking[];
@@ -19,8 +23,8 @@ const Home: NextPage<HomeProps> = ({ songData }: HomeProps) => (
 
 export const getStaticProps: GetStaticProps = async () => {
   const [spotify, apple, iTunes] = await Promise.all([
-    getSongs('https://kworb.net/spotify/country/au_daily.html'),
-    getSongs('https://kworb.net/charts/apple_s/au.html'),
+    getSpotifySongs('https://kworb.net/spotify/country/au_daily.html'),
+    getAppleSongs('https://kworb.net/charts/apple_s/au.html'),
     getITunesSongs('https://kworb.net/popau/'),
   ]);
 
