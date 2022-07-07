@@ -11,7 +11,7 @@ export const SongDisplay = ({ song }: SongDataProps) => {
 
   return (
     <Grid
-      templateColumns="repeat(7, 1fr)"
+      templateColumns="repeat(5, 1fr)"
       py={2}
       px={4}
       w="100%"
@@ -42,13 +42,12 @@ export const SongDisplay = ({ song }: SongDataProps) => {
         <Text
           color={song.rank === 1 ? 'green.400' : 'black'}
           fontSize="md"
-          fontWeight={song.rank === 1 ? 'semibold' : 'normal'}
+          noOfLines={{ base: 1, lg: 2 }}
+          fontWeight={song.rank === 1 ? 'bold' : 'semibold'}
         >
           {song.song}
         </Text>
-      </GridItem>
 
-      <GridItem colSpan={2}>
         <Text
           color={song.rank === 1 ? 'green.400' : 'black'}
           fontSize="md"
