@@ -1,5 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next';
 
+import Head from 'next/head';
+
 import { Container, Text, Box } from '@chakra-ui/react';
 
 import { SongDisplay } from '~/components/song/SongDisplay';
@@ -17,26 +19,31 @@ type HomeProps = {
 };
 
 const Home: NextPage<HomeProps> = ({ songData, generated }: HomeProps) => (
-  <Container p={4}>
-    <Box py={2}>
-      <Text>
-        Updated{' '}
-        {new Intl.DateTimeFormat('en-AU', {
-          timeZoneName: 'short',
-          hour: '2-digit',
-          minute: '2-digit',
-          year: '2-digit',
-          month: '2-digit',
-          day: '2-digit',
-          hour12: false,
-          timeZone: 'Australia/Sydney',
-        }).format(new Date(generated))}{' '}
-      </Text>
-    </Box>
+  <>
+    <Head>
+      <title>Pomelo</title>
+    </Head>
+    <Container p={4}>
+      <Box py={2}>
+        <Text>
+          Updated{' '}
+          {new Intl.DateTimeFormat('en-AU', {
+            timeZoneName: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+            hour12: false,
+            timeZone: 'Australia/Sydney',
+          }).format(new Date(generated))}{' '}
+        </Text>
+      </Box>
 
-    {songData &&
-      songData.map((song) => <SongDisplay song={song} key={song.song} />)}
-  </Container>
+      {songData &&
+        songData.map((song) => <SongDisplay song={song} key={song.song} />)}
+    </Container>
+  </>
 );
 
 export const getStaticProps: GetStaticProps = async () => {
