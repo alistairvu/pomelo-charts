@@ -2,9 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getScores } from '~/lib/getScore';
 import {
-  getSpotifySongs,
   getAppleSongs,
-  getITunesSongs,
+  getSpotifySongs,
   getYouTubeSongs,
 } from '~/lib/parseSong';
 
@@ -12,15 +11,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const [spotify, apple, iTunes, youTube] = await Promise.all([
+  const [spotify, apple, youTube] = await Promise.all([
     getSpotifySongs('https://kworb.net/spotify/country/au_daily.html'),
     getAppleSongs('https://kworb.net/charts/apple_s/au.html'),
-    getITunesSongs('https://kworb.net/popau/'),
     getYouTubeSongs('https://kworb.net/youtube/insights/au.html'),
   ]);
 
-  if (spotify && apple && iTunes && youTube) {
-    const data = getScores({ spotify, apple, iTunes, youTube });
+  if (spotify && apple && youTube) {
+    const data = getScores({ spotify, apple, youTube });
 
     return res.json(data);
   }

@@ -1,4 +1,4 @@
-import { SPOTIFY_MULT, AM_MULT, ITUNES_MULT, YOUTUBE_MULT } from '~/constants';
+import { AM_MULT, SPOTIFY_MULT, YOUTUBE_MULT } from '~/constants';
 
 export const getScore = (ranking: number) => {
   if (ranking <= 20) {
@@ -8,10 +8,9 @@ export const getScore = (ranking: number) => {
   return 0;
 };
 
-const calculateScore = ({ spotify, apple, iTunes, youTube }: RankData) =>
+const calculateScore = ({ spotify, apple, youTube }: RankData) =>
   getScore(spotify ?? 101) * SPOTIFY_MULT +
   getScore(apple ?? 101) * AM_MULT +
-  getScore(iTunes ?? 101) * ITUNES_MULT +
   getScore(youTube ?? 101) * YOUTUBE_MULT;
 
 export const getScores = (siteData: SiteData) => {

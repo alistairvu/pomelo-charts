@@ -1,16 +1,16 @@
 import {
-  Modal,
-  ModalContent,
-  ModalOverlay,
-  ModalBody,
-  ModalCloseButton,
-  Flex,
-  Text,
   Box,
   Divider,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Text,
 } from '@chakra-ui/react';
 
-import { AM_MULT, ITUNES_MULT, SPOTIFY_MULT, YOUTUBE_MULT } from '~/constants';
+import { AM_MULT, SPOTIFY_MULT, YOUTUBE_MULT } from '~/constants';
 import { getScore } from '~/lib/getScore';
 
 type SomeModalProps = {
@@ -97,28 +97,6 @@ export const SongModal = ({ song, isOpen, onClose }: SomeModalProps) => (
                 {song.ranks.apple
                   ? `#${song.ranks.apple} [${
                       getScore(song.ranks.apple ?? 101) * AM_MULT
-                    } pts]`
-                  : 'No In [0 pts]'}
-              </Text>
-            </Flex>
-
-            <Flex
-              textAlign="center"
-              justifyContent="space-between"
-              alignItems="center"
-              py={2}
-              px={4}
-            >
-              <Text>iTunes</Text>
-              <Text
-                color={song.ranks.iTunes === 1 ? 'green.500' : 'black'}
-                fontWeight={
-                  (song.ranks.iTunes ?? 3) <= 2 ? 'semibold' : 'normal'
-                }
-              >
-                {song.ranks.iTunes
-                  ? `#${song.ranks.iTunes} [${
-                      getScore(song.ranks.iTunes ?? 101) * ITUNES_MULT
                     } pts]`
                   : 'No In [0 pts]'}
               </Text>
